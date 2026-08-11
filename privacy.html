@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ForgeFit — Privacy Policy</title>
-  <meta name="description" content="ForgeFit privacy policy: local-first training data, optional private iCloud plan sync, no automatic workout-history backup, and how Apple Health data is handled.">
+  <meta name="description" content="ForgeFit privacy policy: local-first training data, automatic private iCloud plan sync, sanitized workout-history backup, and how Apple Health data is handled.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%8B%EF%B8%8F%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -25,10 +25,10 @@
       <h1>ForgeFit Privacy Policy</h1>
       <p class="updated">Last updated: August 11, 2026</p>
 
-      <p>ForgeFit is built local-first: your training data belongs to you and
-      lives on your device, with optional iCloud sync for your training plan.
-      ForgeFit does not automatically back up your workout history to iCloud
-      Drive in this release.</p>
+      <p>ForgeFit is built local-first: your training data belongs to you. If
+      you are signed into iCloud, ForgeFit automatically syncs your training
+      plan through your private CloudKit database and automatically backs up a
+      sanitized copy of your workout history to your iCloud Drive.</p>
 
       <h2>What we collect</h2>
       <p><strong>We operate no servers and collect no personal
@@ -37,33 +37,46 @@
       analytics and have no backend. Nothing you log is sent anywhere we can
       read it.</p>
 
-      <h2>iCloud sync &amp; earlier backups</h2>
+      <h2>iCloud sync &amp; workout backup</h2>
       <p>If you are signed into iCloud, ForgeFit syncs your <strong>training
       plan</strong> — routines, folders, each microcycle folder's default day
       target, your exercise library, notes, saved interval and yoga presets,
       saved insight charts (their definitions only — the numbers they show are
-      recomputed on each device), and your XP progress — across your Apple
-      devices using Apple's CloudKit. This is stored in your private CloudKit
-      database, encrypted by Apple and accessible only to you.</p>
-      <p>Your <strong>workout history</strong> is different: it stays in a
-      local database on each device and is not automatically synced or backed
-      up to iCloud Drive in this release. Settings → Export data lets you create
-      a JSON or CSV file only when you request it; you choose where that file
-      goes.</p>
-      <p>An earlier test build may have created a ForgeFit training-log backup
-      in your iCloud Drive. ForgeFit can still restore that file, and Settings →
-      Reset all app data attempts to remove it. The earlier backup contains
-      logged training details such as sets, routes, microcycle windows, and rest
-      markers, but excludes experiments, custom experiment entries, heart rate,
-      calories or active energy, step counts, sleep, readiness, body weight,
-      daily check-ins, and other Apple Health data.</p>
+      recomputed on each device), coaching plans and preferences, progression
+      suggestions, and your XP progress — across your Apple devices using
+      Apple's CloudKit. The records are stored under your iCloud account in
+      your private CloudKit database. ForgeFit's developer operates no server
+      and cannot read them.</p>
+      <p>Your <strong>workout history</strong> remains in a local database on
+      each iPhone rather than syncing as live CloudKit records. ForgeFit
+      automatically creates a separate, sanitized backup in Files → iCloud
+      Drive → ForgeFit → Backups. Backup is on automatically when iCloud Drive
+      is available: ForgeFit queues a copy after workout-history changes and
+      performs a daily catch-up while you use the app. It defers backup work
+      while a live workout is open or the app is in the background. ForgeFit
+      keeps a latest and previous copy so an interrupted write does not replace
+      the only usable backup. Settings → iCloud Backup shows the latest success
+      or failure and lets you retry immediately.</p>
+      <p>The workout backup includes user-recorded training details such as
+      workout names and notes, exercises, sets, weights, reps, RPE, cardio and
+      yoga details, precise outdoor route coordinates, imports, microcycle
+      windows, rest markers, and selected app preferences such as display name,
+      units, theme, quick actions, and reminder choices. It excludes experiments
+      and custom experiment entries, workouts imported from Apple Health,
+      HealthKit-filled distance, Health-derived automatic interval detection,
+      heart rate, calories or active energy, step counts, sleep, readiness, body
+      weight, daily check-ins, and other Apple Health data. On another iPhone
+      signed into the same iCloud account, you choose Settings → Import workout
+      history to restore a backup; ForgeFit then re-reads available Health
+      metrics from Apple Health on that device.</p>
 
       <h2>Microcycle tracking</h2>
       <p>A leaf routine folder can be tracked as a repeating microcycle with a
       day target. The folder's default day target is part of your synced
       training plan. Active tracking runs, frozen window snapshots, Home and
       folder-header display choices, and rest-day markers stay in the local
-      training log; they are included only in user-directed data exports.</p>
+      training log; the sanitized automatic workout backup includes them, and
+      user-directed exports can include them too.</p>
       <p>Progress is derived from completed workouts linked to routines in that
       microcycle. A rest-day marker adds calendar context but never completes a
       routine. Workouts completed on Apple Watch can contribute after they
@@ -102,9 +115,9 @@
       sync and backup, and is protected by iOS's Health data security. A
       user-directed data export can include Health metrics stored with workouts
       or used in an experiment; you choose that export's destination. When you
-      restore a ForgeFit backup created by an earlier test build, ForgeFit
-      re-reads available Health metrics from Apple Health on that device. You
-      can revoke access at any time in the Health app under Sharing → Apps.</p>
+      restore a ForgeFit workout backup, ForgeFit re-reads available Health
+      metrics from Apple Health on that device. You can revoke access at any
+      time in the Health app under Sharing → Apps.</p>
 
       <h2>Apple Watch</h2>
       <p>If you use the ForgeFit watch app, workout data syncs directly between
@@ -153,14 +166,18 @@
       or rest-day markers; deleting one experiment removes only that experiment
       and its entries. Neither action deletes Apple Health data.</p>
       <p>Your training plan in iCloud can be removed by deleting routines in the
-      app (deletions sync) or via Settings → Reset all app data. If an earlier
-      test build created a training-log backup, it is an ordinary file you
-      control: delete it in Files → iCloud Drive → ForgeFit → Backups, or use
-      Settings → Reset all app data, which attempts to remove it and tells you
-      if it could not. Any earlier public Community data must be removed
-      separately with Settings → Delete Community data. Workouts written to
-      Apple Health remain there under your control and can be deleted in the
-      Health app.</p>
+      app (deletions sync) or via Settings → Reset all app data. The workout
+      backup is an ordinary pair of files you control: delete it with Settings
+      → iCloud Backup → Delete workout backup, in Files → iCloud Drive →
+      ForgeFit → Backups, or via Settings → Reset all app data. Reset attempts
+      to remove the backup and tells you if it could not. Because workout backup
+      is automatic, deleting only the backup does not turn backup off; a new
+      copy is created after future workout-history changes or a later daily
+      catch-up. Deleting the app from one device does not by itself delete the
+      private CloudKit plan or iCloud Drive backup. Any earlier public Community
+      data must be removed separately with Settings → Delete Community data.
+      Workouts written to Apple Health remain there under your control and can
+      be deleted in the Health app.</p>
 
       <h2>Changes</h2>
       <p>This privacy policy will be updated if any future version changes how
